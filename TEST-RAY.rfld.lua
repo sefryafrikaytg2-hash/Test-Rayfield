@@ -15,9 +15,7 @@ local Window = Rayfield:CreateWindow({
         FileName = "redZinxKey",
         SaveKey = false,
         GrabKeyFromSite = false,
-        Key = {"FREE_U1Z4X9C91C01M6C0V9M", "FREE_u19m0vb704v9x6m5mzzx", "tenshidevpremium-u7m90nm7912", "PREMIUM_g7kl4d3p91li97kas9x91c90c"
-      , "IDN_premiumkeyyy143", "TNSHI_IDNKEY9324", "ChildIDN_SumbangPalestinaPremiumKey"
-      , "PalestinaKey_Sumbang890"}
+        Key = {"FREE_U1Z4X9C91C01M6C0V9M", "FREE_u19m0vb704v9x6m5mzzx", "tenshidevpremium-u7m90nm7912", "PREMIUM_g7kl4d3p91li97kas9x91c90c", "IDN_premiumkeyyy143", "TNSHI_IDNKEY9324", "ChildIDN_SumbangPalestinaPremiumKey", "PalestinaKey_Sumbang890"}
     }
 })
 
