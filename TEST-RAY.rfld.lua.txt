@@ -3,55 +3,116 @@
 local Rayfield = loadstring(game:HttpGet("https://sirius.menu/rayfield"))()
 
 local Window = Rayfield:CreateWindow({
-    Name = "redZinx Hub | Blox Fruits",
+    Name = "Server Hop | Universal",
     LoadingTitle = "Loading Please Wait...",
     LoadingSubtitle = "by TenshiDev",
     Icon = 0,
     KeySystem = true,
     KeySettings = {
-        Title = "redZinx Hub Keysystem",
-        Subtitle = "Script redZinx Premium",
+        Title = "Server Hop",
+        Subtitle = "Script Server Hop Premium",
         Note = "Take a Key on Owner Discord",
-        FileName = "redZinxKey",
+        FileName = "ServerHopKey",
         SaveKey = false,
         GrabKeyFromSite = false,
         Key = {"FREE_U1Z4X9C91C01M6C0V9M", "FREE_u19m0vb704v9x6m5mzzx", "tenshidevpremium-u7m90nm7912", "PREMIUM_g7kl4d3p91li97kas9x91c90c", "IDN_premiumkeyyy143", "TNSHI_IDNKEY9324", "ChildIDN_SumbangPalestinaPremiumKey", "PalestinaKey_Sumbang890"}
     }
 })
 
-local MainTab = Window:CreateTab("⛓️ Main")
+local MainTab = Window:CreateTab("💻 Server Hop")
+local TeleportTab = Window:CreateTab("👤 Teleport to User")
 local MiscTab = Window:CreateTab("⚙️ Misc")
 
-local Section = MainTab:CreateSection("Scripts Main")
+local function ServerHop()
+    local PlaceID = game.PlaceId
+    local Http = game:GetService("HttpService")
+    local TS = game:GetService("TeleportService")
+    local servers = Http:JSONDecode(game:HttpGet("https://games.roblox.com/v1/games/" .. PlaceID .. "/servers/Public?sortOrder=Asc&limit=100"))
+    for _, v in ipairs(servers.data) do
+        if v.playing < v.maxPlayers and v.id \~= game.JobId then
+            TS:TeleportToPlaceInstance(PlaceID, v.id, game.Players.LocalPlayer)
+            return
+        end
+    end
+    Rayfield:Notify({Title = "Server Hop", Content = "Gak nemu server kosong, coba lagi nanti!", Duration = 5})
+end
 
-local Button = MainTab:CreateButton({
-    Name = "redZinx Hub (V1)",
-    Callback = function()
-        loadstring(game:HttpGet("https://scripts-raw.gamer.gd/cdn/redzinxv1.lua"))()
-    end,
+local function ServerHopLow()
+    local PlaceID = game.PlaceId
+    local Http = game:GetService("HttpService")
+    local TS = game:GetService("TeleportService")
+    local servers = Http:JSONDecode(game:HttpGet("https://games.roblox.com/v1/games/" .. PlaceID .. "/servers/Public?sortOrder=Asc&limit=100"))
+    table.sort(servers.data, function(a, b) return a.playing < b.playing end)
+    for _, v in ipairs(servers.data) do
+        if v.playing < v.maxPlayers and v.id \~= game.JobId then
+            TS:TeleportToPlaceInstance(PlaceID, v.id, game.Players.LocalPlayer)
+            return
+        end
+    end
+    Rayfield:Notify({Title = "Server Hop Low Player", Content = "Gak nemu server sepi, semua penuh!", Duration = 5})
+end
+
+local function TeleportTo(username)
+    local target = game.Players:FindFirstChild(username)
+    if target and target.Character and target.Character:FindFirstChild("HumanoidRootPart") then
+        local hrp = game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
+        if hrp then
+            hrp.CFrame = target.Character.HumanoidRootPart.CFrame + Vector3.new(0, 5, 0)
+            Rayfield:Notify({Title = "Teleport", Content = "Masuk ke " .. username .. "!", Duration = 3})
+            return
+        end
+    end
+    Rayfield:Notify({Title = "Teleport", Content = "Player " .. username .. " gak ketemu!", Duration = 5})
+end
+
+local Section = MainTab:CreateSection("Server Hops")
+
+MainTab:CreateButton({
+    Name = "Server Hop",
+    Callback = ServerHop
 })
 
-local Button = MainTab:CreateButton({
-    Name = "redZinx Hub (V2)",
-    Callback = function()
-        loadstring(game:HttpGet("https://scripts-raw.gamer.gd/cdn/redzinxv2.lua"))()
-    end,
+MainTab:CreateButton({
+    Name = "Server Hop Little Player",
+    Callback = ServerHopLow
 })
 
-local Paragraph = MiscTab:CreateParagraph({
+local targetName = ""
+
+TeleportTab:CreateInput({
+    Name = "Username",
+    Placeholder = "Masukin username (contoh: rip_indra)",
+    RemoveTextAfterFocusLost = false,
+    Callback = function(Text)
+        targetName = Text
+    end
+})
+
+TeleportTab:CreateButton({
+    Name = "Teleport Sekarang",
+    Callback = function()
+        if targetName == "" then
+            Rayfield:Notify({Title = "Error", Content = "Isi username dulu!", Duration = 4})
+            return
+        end
+        TeleportTo(targetName)
+    end
+})
+
+MiscTab:CreateParagraph({
     Title = "Misc",
     Content = "This Is a Misc Tab."
 })
 
-local Button = MiscTab:CreateButton({
+MiscTab:CreateButton({
     Name = "Close Window",
     Callback = function()
         Rayfield:Destroy()
-    end,
+    end
 })
 
 Rayfield:Notify({
     Title = "Loaded Script!",
     Content = "Completed Loaded Script...",
-    Duration = 5,
+    Duration = 5
 })
